@@ -10,7 +10,7 @@ const Header = () => {
           to="/"
           className="text-3xl font-bold tracking-tight text-red-500"
         >
-          MernEats.com
+          TasteX.com
         </Link>
         <div className="md:hidden">
           <MobileNav />
