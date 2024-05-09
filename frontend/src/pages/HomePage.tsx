@@ -16,6 +16,10 @@ import SearchBar, { SearchForm } from "@/components/SearchBar";
 import { useNavigate } from "react-router-dom";
 import ImageButton from "@/components/ImageButton";
 
+// Import your custom left and right arrow SVG icons
+import LeftArrowIcon from "../assets/LeftArrowIcon.svg";
+import RightArrowIcon from "../assets/RightArrowIcon.svg";
+
 const HomePage = () => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(0); // Start from page 0 for circular queue
@@ -34,7 +38,7 @@ const HomePage = () => {
     };
   }, []);
 
-  const handleSearchSubmit = (searchFormValues: SearchForm) => { // Specify the type of searchFormValues
+  const handleSearchSubmit = (searchFormValues: SearchForm) => {
     navigate({
       pathname: `/search/${searchFormValues.searchQuery}`,
     });
@@ -63,29 +67,22 @@ const HomePage = () => {
       { image: Noodles, name: "Noodles" }, // Add Noodles
     ];
 
-    // Calculate the available width for buttons
-    const availableWidth = window.innerWidth - 380; // 380px is the width of other elements in the container
-
-    // Calculate the maximum number of buttons that can fit in the available space
+    const availableWidth = window.innerWidth - 380;
     const maxButtons = Math.floor(availableWidth / buttonWidth);
-
-    // Calculate the start index based on the current page
     const startIndex = currentPage % buttonsToShow.length;
-
-    // Calculate the end index based on the maximum number of buttons
     const endIndex = (startIndex + maxButtons) % buttonsToShow.length;
 
-    // Adjust the buttons to display based on the calculated start and end indices
     const visibleButtons = endIndex > startIndex
       ? buttonsToShow.slice(startIndex, endIndex)
       : buttonsToShow.slice(startIndex).concat(buttonsToShow.slice(0, endIndex));
 
-    return visibleButtons.map((button, index) => (
-      <div className="button-container" key={index}>
-        <ImageButton image={button.image} name={button.name} circle size={180} />
-        <span className="mt-2">{button.name}</span>
-      </div>
-    ));
+      return visibleButtons.map((button, index) => (
+        <div className="button-container" key={index}>
+          <ImageButton image={button.image} name={button.name} circle size={180} />
+          <span className="mt-2 ml-5" style={{ marginLeft: '65px' }}>{button.name}</span> {/* Adjust marginLeft value */}
+        </div>
+      ));
+      
   };
 
   return (
@@ -108,13 +105,13 @@ const HomePage = () => {
               className="text-gray-600 hover:text-gray-900 mr-2"
               onClick={handlePrevPage}
             >
-              &lt;
+              <img src={LeftArrowIcon} alt="Left Arrow" style={{ width: '20px', height: '20px' }} /> {/* Use custom left arrow SVG icon */}
             </button>
             <button
               className="text-gray-600 hover:text-gray-900"
               onClick={handleNextPage}
             >
-              &gt;
+              <img src={RightArrowIcon} alt="Right Arrow" style={{ width: '20px', height: '20px' }} /> {/* Use custom right arrow SVG icon */}
             </button>
           </div>
         </div>
