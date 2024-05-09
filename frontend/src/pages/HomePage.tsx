@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import landingImage from "../assets/landing.png";
 import Pizza from "../assets/Pizza.png";
 import Biriyani from "../assets/Biriyani.png";
@@ -14,11 +14,31 @@ import Noodles from "../assets/Noodles.png"; // Import Noodles image
 import appDownloadImage from "../assets/appDownload.png";
 import SearchBar, { SearchForm } from "@/components/SearchBar";
 import { useNavigate } from "react-router-dom";
-import ImageButton from "@/components/ImageButton";
+import "./styles.css";
+
+
 
 // Import your custom left and right arrow SVG icons
 import LeftArrowIcon from "../assets/LeftArrowIcon.svg";
 import RightArrowIcon from "../assets/RightArrowIcon.svg";
+
+// Define ImageButtonProps type with className property
+type ImageButtonProps = {
+  image: string;
+  name: string;
+  circle: boolean;
+  size: number;
+  className?: string; // Add className property as optional
+};
+
+// Modify the ImageButton component to accept className prop
+const ImageButton: React.FC<ImageButtonProps> = ({ image, name, circle, size, className }) => {
+  return (
+    <div className={`image-button ${className}`} style={{ width: size, height: size, borderRadius: circle ? "50%" : "0%" }}>
+      <img src={image} alt={name} style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: circle ? "50%" : "0%" }} />
+    </div>
+  );
+};
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -52,6 +72,11 @@ const HomePage = () => {
     setCurrentPage((prevPage) => (prevPage === 0 ? totalButtons - 1 : prevPage - 1));
   };
 
+  const handleButtonClick = (dishName: string) => {
+    // Add your logic to handle button clicks here
+    console.log(`Clicked on ${dishName}`);
+  };
+
   const renderButtons = () => {
     const buttonsToShow = [
       { image: Biriyani, name: "Biriyani" },
@@ -66,25 +91,24 @@ const HomePage = () => {
       { image: Pasta, name: "Pasta" }, // Add Pasta
       { image: Noodles, name: "Noodles" }, // Add Noodles
     ];
-
+  
     const availableWidth = window.innerWidth - 380;
     const maxButtons = Math.floor(availableWidth / buttonWidth);
     const startIndex = currentPage % buttonsToShow.length;
     const endIndex = (startIndex + maxButtons) % buttonsToShow.length;
-
+  
     const visibleButtons = endIndex > startIndex
       ? buttonsToShow.slice(startIndex, endIndex)
       : buttonsToShow.slice(startIndex).concat(buttonsToShow.slice(0, endIndex));
-
-      return visibleButtons.map((button, index) => (
-        <div className="button-container" key={index}>
-          <ImageButton image={button.image} name={button.name} circle size={180} />
-          <span className="mt-2 ml-5" style={{ marginLeft: '65px' }}>{button.name}</span> {/* Adjust marginLeft value */}
-        </div>
-      ));
-      
+  
+    return visibleButtons.map((button, index) => (
+      <div className="button-container" key={index}>
+        <ImageButton image={button.image} name={button.name} circle size={180} />
+        <span className="mt-2 ml-5" style={{ marginLeft: '65px' }}>{button.name}</span> {/* Adjust marginLeft value */}
+      </div>
+    ));
   };
-
+  
   return (
     <div className="flex flex-col gap-12">
       <div className="md:px-32 bg-white rounded-lg shadow-md py-8 flex flex-col gap-5 text-center -mt-16">
