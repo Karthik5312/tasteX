@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import landingImage from "../assets/landing.png";
 import Pizza from "../assets/Pizza.png";
 import Biriyani from "../assets/Biriyani.png";
@@ -22,7 +22,19 @@ const HomePage = () => {
   const buttonWidth = 180; // Width of each button
   const totalButtons = 11; // Total number of buttons (including duplicates)
 
-  const handleSearchSubmit = (searchFormValues: SearchForm) => {
+  useEffect(() => {
+    const handleResize = () => {
+      setCurrentPage(0); // Reset current page on window resize
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  const handleSearchSubmit = (searchFormValues: SearchForm) => { // Specify the type of searchFormValues
     navigate({
       pathname: `/search/${searchFormValues.searchQuery}`,
     });
@@ -34,11 +46,6 @@ const HomePage = () => {
 
   const handlePrevPage = () => {
     setCurrentPage((prevPage) => (prevPage === 0 ? totalButtons - 1 : prevPage - 1));
-  };
-
-  const buttonContainerStyle = {
-    transform: `translateX(-${currentPage * buttonWidth}px)`,
-    transition: "transform 0.5s ease-in-out",
   };
 
   const renderButtons = () => {
@@ -56,7 +63,22 @@ const HomePage = () => {
       { image: Noodles, name: "Noodles" }, // Add Noodles
     ];
 
-    const visibleButtons = buttonsToShow.slice(currentPage).concat(buttonsToShow.slice(0, currentPage));
+    // Calculate the available width for buttons
+    const availableWidth = window.innerWidth - 380; // 380px is the width of other elements in the container
+
+    // Calculate the maximum number of buttons that can fit in the available space
+    const maxButtons = Math.floor(availableWidth / buttonWidth);
+
+    // Calculate the start index based on the current page
+    const startIndex = currentPage % buttonsToShow.length;
+
+    // Calculate the end index based on the maximum number of buttons
+    const endIndex = (startIndex + maxButtons) % buttonsToShow.length;
+
+    // Adjust the buttons to display based on the calculated start and end indices
+    const visibleButtons = endIndex > startIndex
+      ? buttonsToShow.slice(startIndex, endIndex)
+      : buttonsToShow.slice(startIndex).concat(buttonsToShow.slice(0, endIndex));
 
     return visibleButtons.map((button, index) => (
       <div className="button-container" key={index}>
@@ -96,7 +118,7 @@ const HomePage = () => {
             </button>
           </div>
         </div>
-        <div className="flex" style={buttonContainerStyle}>
+        <div className="flex">
           {renderButtons()}
         </div>
       </div>
