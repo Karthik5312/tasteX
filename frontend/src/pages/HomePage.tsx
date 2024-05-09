@@ -79,17 +79,17 @@ const HomePage = () => {
 
   const renderButtons = () => {
     const buttonsToShow = [
+      { image: Shawarma, name: "Shawarma" },
+      { image: Juice, name: "Juice" },
+      { image: Dosa, name: "Dosa" }, 
+      { image: Cake, name: "Cake" }, 
+      { image: Puttu, name: "Puttu" }, 
+      { image: IceCream, name: "Ice Cream" },
       { image: Biriyani, name: "Biriyani" },
       { image: Pizza, name: "Pizza" },
       { image: Burger, name: "Burger" },
-      { image: Shawarma, name: "Shawarma" },
-      { image: Juice, name: "Juice" },
-      { image: Dosa, name: "Dosa" }, // Add Dosa
-      { image: Cake, name: "Cake" }, // Add Cake
-      { image: Puttu, name: "Puttu" }, // Add Puttu
-      { image: IceCream, name: "Ice Cream" }, // Add Ice Cream
-      { image: Pasta, name: "Pasta" }, // Add Pasta
-      { image: Noodles, name: "Noodles" }, // Add Noodles
+      { image: Pasta, name: "Pasta" }, 
+      { image: Noodles, name: "Noodles" }, 
     ];
   
     const availableWidth = window.innerWidth - 380;
